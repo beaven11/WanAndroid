@@ -5,6 +5,7 @@ import com.beaven.wanandroid.util.Logger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
+import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
 /**
@@ -16,18 +17,29 @@ import java.util.concurrent.TimeUnit
  */
 object HttpManager {
 
-    fun httpClient(): OkHttpClient {
-        val interceptor = HttpLoggingInterceptor(
-                HttpLoggingInterceptor.Logger { message: String? ->
-                    val text = message ?: "http request body is null"
-                    Logger.d(text, "HttpRequest")
-                })
-        interceptor.level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
-        return OkHttpClient.Builder().connectTimeout(
-                60, TimeUnit.SECONDS
-        ).readTimeout(60, TimeUnit.SECONDS).addNetworkInterceptor(interceptor).writeTimeout(
-                60, TimeUnit.SECONDS
-        ).build()
+    private const val TIME_OUT = 60L
+    private const val BASE_URL = "http://www.mejust.com"
+
+    private fun client(): OkHttpClient {
+        return with(OkHttpClient.Builder()) {
+            connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+            readTimeout(TIME_OUT, TimeUnit.SECONDS)
+            writeTimeout(TIME_OUT, TimeUnit.SECONDS)
+        }.also {
+            val interceptor = HttpLoggingInterceptor(
+                    HttpLoggingInterceptor.Logger { message: String? ->
+                        val text = message ?: "http request body is null"
+                        Logger.d(text, "HttpRequest")
+                    })
+            interceptor.level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
+            it.addInterceptor(interceptor)
+        }.build()
     }
 
+    fun getService(): ApiService {
+        return with(Retrofit.Builder()) {
+            baseUrl(BASE_URL)
+            client(client())
+        }.build().create(ApiService::class.java)
+    }
 }
