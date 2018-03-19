@@ -4,7 +4,8 @@ import com.beaven.wanandroid.BuildConfig
 import com.beaven.wanandroid.util.Logger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level
+import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
@@ -17,22 +18,24 @@ import java.util.concurrent.TimeUnit
  */
 object HttpManager {
 
-    private const val TIME_OUT = 60L
+    private const val TIME_OUT = 60
     private const val BASE_URL = "http://www.mejust.com"
 
     private fun client(): OkHttpClient {
         return with(OkHttpClient.Builder()) {
-            connectTimeout(TIME_OUT, TimeUnit.SECONDS)
-            readTimeout(TIME_OUT, TimeUnit.SECONDS)
-            writeTimeout(TIME_OUT, TimeUnit.SECONDS)
+            connectTimeout(TIME_OUT.toLong(), TimeUnit.SECONDS)
+            readTimeout(TIME_OUT.toLong(), TimeUnit.SECONDS)
+            writeTimeout(TIME_OUT.toLong(), TimeUnit.SECONDS)
         }.also {
-            val interceptor = HttpLoggingInterceptor(
-                    HttpLoggingInterceptor.Logger { message: String? ->
-                        val text = message ?: "http request body is null"
-                        Logger.d(text, "HttpRequest")
-                    })
-            interceptor.level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
-            it.addInterceptor(interceptor)
+            it.addInterceptor(
+                    HttpLoggingInterceptor(
+                            HttpLoggingInterceptor.Logger { message: String? ->
+                                val text = message ?: "http request body is null"
+                                Logger.d(text, "HttpRequest")
+                            }).apply {
+                        level = if (BuildConfig.DEBUG) BODY else NONE
+                    }
+            )
         }.build()
     }
 
