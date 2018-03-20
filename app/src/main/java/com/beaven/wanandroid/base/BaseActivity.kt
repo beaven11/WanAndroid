@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
 
 /**
@@ -60,6 +61,7 @@ abstract class BaseActivity<T : BaseContract.BasePresenter> : AppCompatActivity(
     }
 
     override fun showErrorView(error: String) {
+        toast(error)
     }
 
     override fun getView(): FragmentActivity {
