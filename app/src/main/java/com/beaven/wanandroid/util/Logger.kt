@@ -1,36 +1,36 @@
 package com.beaven.wanandroid.util
 
-import android.util.Log
+import com.beaven.wanandroid.config.TAG_ALL
+import timber.log.Timber
 
 /**
- * 创建时间: 2018/03/12 17:13<br></br>
- * 创建人: 王培峰<br></br>
- * 修改人: 王培峰<br></br>
- * 修改时间: 2018/03/12 17:13<br></br>
+ * 创建时间: 2018/03/20 15:31<br>
+ * 创建人: 王培峰<br>
+ * 修改人: 王培峰<br>
+ * 修改时间: 2018/03/20 15:31<br>
  * 描述:
  */
 object Logger {
 
-    private const val TAG = "WanAndroid"
-
-    fun d(
+    fun debug(
         message: String,
-        tag: String = TAG
+        tag: String = TAG_ALL
     ) {
-        Log.d(tag, message)
+        Timber.tag(tag).d(message)
     }
 
-    fun i(
+    fun info(
         message: String,
-        tag: String = TAG
+        tag: String = TAG_ALL
     ) {
-        Log.i(tag, message)
+        Timber.tag(tag).i(message)
     }
 
-    fun e(
-        message: String,
-        tag: String = TAG
+    fun error(
+        t: Throwable,
+        message: String = "",
+        tag: String = TAG_ALL
     ) {
-        Log.e(tag, message)
+        Timber.tag(tag).e(t, message)
     }
 }

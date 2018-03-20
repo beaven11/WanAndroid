@@ -1,7 +1,8 @@
 package com.beaven.wanandroid.config
 
 import android.app.Application
-import com.beaven.wanandroid.util.Logger
+import timber.log.Timber
+import timber.log.Timber.DebugTree
 
 /**
  * 创建时间: 2018/03/12 17:11<br>
@@ -14,6 +15,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Logger.d("App init")
+        Timber.plant(DebugTree())
     }
 }

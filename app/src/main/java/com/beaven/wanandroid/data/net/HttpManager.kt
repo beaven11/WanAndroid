@@ -1,12 +1,15 @@
 package com.beaven.wanandroid.data.net
 
 import com.beaven.wanandroid.BuildConfig
+import com.beaven.wanandroid.config.BASE_URL
 import com.beaven.wanandroid.util.Logger
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 /**
@@ -19,30 +22,23 @@ import java.util.concurrent.TimeUnit
 object HttpManager {
 
     private const val TIME_OUT = 60
-    private const val BASE_URL = "http://www.mejust.com"
 
     private fun client(): OkHttpClient {
-        return with(OkHttpClient.Builder()) {
-            connectTimeout(TIME_OUT.toLong(), TimeUnit.SECONDS)
-            readTimeout(TIME_OUT.toLong(), TimeUnit.SECONDS)
-            writeTimeout(TIME_OUT.toLong(), TimeUnit.SECONDS)
-        }.also {
-            it.addInterceptor(
-                    HttpLoggingInterceptor(
-                            HttpLoggingInterceptor.Logger { message: String? ->
-                                val text = message ?: "http request body is null"
-                                Logger.d(text, "HttpRequest")
-                            }).apply {
-                        level = if (BuildConfig.DEBUG) BODY else NONE
-                    }
-            )
-        }.build()
+        return OkHttpClient.Builder().connectTimeout(
+                TIME_OUT.toLong(), TimeUnit.SECONDS
+        ).readTimeout(TIME_OUT.toLong(), TimeUnit.SECONDS).writeTimeout(
+                TIME_OUT.toLong(), TimeUnit.SECONDS
+        ).addInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message: String? ->
+            Logger.debug(message ?: "request message is null")
+        }).setLevel((if (BuildConfig.DEBUG) BODY else NONE))).build()
     }
 
     fun getService(): ApiService {
         return with(Retrofit.Builder()) {
             baseUrl(BASE_URL)
             client(client())
+            addConverterFactory(GsonConverterFactory.create())
+            addCallAdapterFactory(CoroutineCallAdapterFactory())
         }.build().create(ApiService::class.java)
     }
 }

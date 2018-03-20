@@ -1,12 +1,13 @@
-package com.beaven.wanandroid
+package com.beaven.wanandroid.mvp
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.beaven.wanandroid.R
 
-class MainActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_detail)
     }
 }

@@ -13,9 +13,11 @@ public interface BaseContract {
 
     public interface BaseView {
 
-        fun showToast(message: String)
+        fun showToastDialog(message: String)
 
-        fun showDialog(message: String)
+        fun showErrorView(error: String)
+
+        fun getView(): FragmentActivity
     }
 
     public interface BasePresenter {

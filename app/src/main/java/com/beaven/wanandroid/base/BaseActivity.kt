@@ -1,9 +1,11 @@
 package com.beaven.wanandroid.base
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
-import com.beaven.wanandroid.util.Logger
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.yesButton
 
 /**
  * 创建时间: 2018/03/12 17:31<br>
@@ -13,17 +15,54 @@ import com.beaven.wanandroid.util.Logger
  * 描述:
  */
 
-abstract class BaseActivity : AppCompatActivity(), BaseContract.BaseView {
+abstract class BaseActivity<T : BaseContract.BasePresenter> : AppCompatActivity(),
+        BaseContract.BaseView {
+
+    protected lateinit var presenter: T
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(getLayoutId())
+        initData(intent)
+        initView()
+        presenter = initPresenter()
+        presenter.onCreate()
     }
 
-    override fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume()
     }
 
-    override fun showDialog(message: String) {
-        Logger.d("show dialog $message")
+    override fun onPause() {
+        super.onPause()
+        presenter.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
+    }
+
+    abstract fun getLayoutId(): Int
+
+    abstract fun initPresenter(): T
+
+    abstract fun initData(intent: Intent)
+
+    abstract fun initView()
+
+    override fun showToastDialog(message: String) {
+        val dialog = alert(message) {
+            yesButton { }
+        }
+        dialog.show()
+    }
+
+    override fun showErrorView(error: String) {
+    }
+
+    override fun getView(): FragmentActivity {
+        return this
     }
 }

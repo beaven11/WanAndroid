@@ -1,6 +1,9 @@
 package com.beaven.wanandroid.data.net
 
-import retrofit2.Call
+import com.beaven.wanandroid.mvp.main.bean.HomeListData
+import kotlinx.coroutines.experimental.Deferred
+import retrofit2.http.GET
+import retrofit2.http.Path
 
 /**
  * 创建时间: 2018/03/16 15:10<br>
@@ -11,5 +14,6 @@ import retrofit2.Call
  */
 interface ApiService {
 
-    fun requestTest(): Call<String>
+    @GET("/article/list/{index}/json")
+    fun getHomeList(@Path("index") index: Int): Deferred<HttpResult<HomeListData>>
 }
