@@ -9,7 +9,6 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.JobCancellationException
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import org.jetbrains.anko.coroutines.experimental.bg
 
 /**
  * 创建时间: 2018/03/20 10:17<br>
@@ -55,9 +54,9 @@ open class BasePresenter(private val view: BaseView) : BaseContract.BasePresente
     ) {
         async(UI) {
             try {
-                val req = bg { this@callRequest }
+                val req = this@callRequest
                 deferredList.add(req)
-                val result = req.await().await()
+                val result = req.await()
                 action(result.convert())
             } catch (e: Exception) {
                 if (errorAction != null) {
