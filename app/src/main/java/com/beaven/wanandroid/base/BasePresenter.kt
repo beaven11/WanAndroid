@@ -6,6 +6,7 @@ import com.beaven.wanandroid.data.net.HttpManager
 import com.beaven.wanandroid.data.net.HttpResult
 import com.beaven.wanandroid.util.Logger
 import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.JobCancellationException
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
@@ -34,7 +35,13 @@ open class BasePresenter(private val view: BaseView) : BaseContract.BasePresente
 
     override fun onDestroy() {
         deferredList.forEach {
-            it.cancel()
+            try {
+                if (it.isActive) {
+                    it.cancel()
+                }
+            } catch (cancel: JobCancellationException) {
+
+            }
         }
     }
 
@@ -42,18 +49,22 @@ open class BasePresenter(private val view: BaseView) : BaseContract.BasePresente
         return view.getView()
     }
 
-    protected fun <T> callRequest(
-        request: Deferred<HttpResult<T>>,
+    protected fun <T> Deferred<HttpResult<T>>.callRequest(
+        errorAction: ((Exception) -> Unit)? = null,
         action: (T) -> Unit
     ) {
         async(UI) {
             try {
-                val req = bg { request }
+                val req = bg { this@callRequest }
                 deferredList.add(req)
                 val result = req.await().await()
                 action(result.convert())
             } catch (e: Exception) {
-                e.message?.let { view.showErrorView(it) }
+                if (errorAction != null) {
+                    errorAction(e)
+                } else {
+                    e.message?.let { view.showErrorView(it) }
+                }
                 Logger.error(e)
             }
         }

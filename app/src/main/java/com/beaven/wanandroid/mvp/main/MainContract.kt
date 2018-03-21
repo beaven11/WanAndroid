@@ -12,6 +12,7 @@ import com.beaven.wanandroid.mvp.main.bean.HomeListData
  */
 
 interface MainView : BaseContract.BaseView {
+
     fun showResult(result: HomeListData)
 }
 

@@ -9,9 +9,9 @@ import android.support.v4.app.FragmentActivity
  * 修改时间: 2018/03/12 17:26<br>
  * 描述:
  */
-public interface BaseContract {
+interface BaseContract {
 
-    public interface BaseView {
+    interface BaseView {
 
         fun showToastDialog(message: String)
 
@@ -20,7 +20,7 @@ public interface BaseContract {
         fun getView(): FragmentActivity
     }
 
-    public interface BasePresenter {
+    interface BasePresenter {
 
         fun onCreate()
 

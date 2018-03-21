@@ -15,7 +15,7 @@ class MainPresenter(private val view: MainView) : BasePresenter(view),
         MainPresenter {
 
     override fun request() {
-        callRequest(apiService.getHomeList(0)) {
+        apiService.getHomeList(0).callRequest {
             view.showResult(it)
         }
     }
