@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:background="@drawable/selector_item_home"
+   android:clickable="true"
+   android:focusable="true"
+   android:orientation="vertical"
+   >
+  <TextView
+     android:id="@+id/text_title_home"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:padding="@dimen/item_padding_default"
+     android:textColor="@android:color/black"
+     android:textSize="@dimen/sp_15"
+     tools:text="整理了一些学习资料"
+     />
+  <TextView
+     android:id="@+id/text_desc_home"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:paddingBottom="@dimen/padding_item_home_desc"
+     android:paddingLeft="@dimen/item_padding_default"
+     android:paddingRight="@dimen/item_padding_default"
+     android:paddingTop="@dimen/padding_item_home_desc"
+     android:textSize="@dimen/sp_12"
+     tools:text="@string/text_desc_format"
+     />
+</LinearLayout>

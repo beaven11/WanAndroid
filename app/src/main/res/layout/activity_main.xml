@@ -7,16 +7,11 @@
    android:orientation="vertical"
    tools:context="com.beaven.wanandroid.mvp.main.view.MainActivity"
    >
-  <Button
-     android:id="@+id/button_request"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:text="@string/app_name"
-     />
-  <TextView
-     android:id="@+id/text_content"
+  <android.support.v7.widget.RecyclerView
+     android:id="@+id/recycler_home"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
-     tools:text="@string/app_name"
-     />
+     >
+
+  </android.support.v7.widget.RecyclerView>
 </LinearLayout>
